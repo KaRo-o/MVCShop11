@@ -74,12 +74,18 @@ function resetData(){
 
 function appendImageSlot() {
 	i++
-	var newNode = '<span id='+i+'><input type="file" name="fileName" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13">'
-						+'<input type="button" class="btn btn-danger" onclick="javascript:removeImageSlot('+i+');" value="삭제"></span>';
+	var newNode = '<div id='+i+'><input type="file" name="fileName" accept="image/*" class="pull-left" style="width:90%">'
+						+'<button type="button" class="close pull-right" onclick="javascript:removeImageSlot('+i+');" >&times;</button></div>';
 	
 	$('.inputImageTd').append(newNode);
 	
 }
+
+$(function() {
+	$('#confirm').on('click', function() {
+		fncAddProduct();
+	});
+});
 
 
 function removeImageSlot(j) {
@@ -128,41 +134,48 @@ body { padding-top:50px;}
 		<div class="form-group">
 			<label class="col-sm-3 col-sm-offset-1 control-label">상품명</label>
 			<div class="col-sm-4">
-				<input type="text" class="form-control" name="prodName">
+				<input type="text" class="form-control" name="prodName" placeholder="상품명">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label class="col-sm-3 col-sm-offset-1 control-label">상품상세정보</label>
 			<div class="col-sm-4">
-				<input type="text" class="form-control" name="prodDetail">
+				<input type="text" class="form-control" name="prodDetail" placeholder="상품 상세정보">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label class="col-sm-3 col-sm-offset-1 control-label">제조일자</label>
 			<div class="col-sm-4">
-				<input type="text" name="manuDate" readonly="readonly" class="form-control" 
+				<input type="text" name="manuDate" readonly="readonly" class="form-control" placeholder="이곳을 클릭하여 날짜를 선택하세요"
 				onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)"/>
 			</div>
-			<img src="../images/ct_icon_date.gif" width="26" height="26" 
-							onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)"/>
+			<!-- <img src="../images/ct_icon_date.gif" width="26" height="26" 
+							onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)"/> -->
 		</div>
 		
 		<div class="form-group">
 			<label class="col-sm-3 col-sm-offset-1 control-label">가격</label>
 			<div class="col-sm-4">
-				<input type="text" class="form-control" name="price">
+				<input type="text" class="form-control" name="price" placeholder="가격">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label class="col-sm-3 col-sm-offset-1 control-label">상품이미지</label>
-			<div class="col-sm-4 inputImageTd">
-				
-			</div>
 			<input type="button" class="addImageSlot btn btn-info" value="이미지 추가">
+			<div class="col-sm-4 inputImageTd" >
+			</div>
 		</div>
+		
+		<div class="form-group">
+		    <div class="col-sm-offset-4  col-sm-4 text-center">
+		      <button type="button" class="btn btn-primary" id="confirm" >등&nbsp;록</button>
+			  <a class="btn btn-primary" href="#" role="button">취&nbsp;소</a>
+		    </div>
+		  </div>
+		</form>
 		
 	
 	</form>

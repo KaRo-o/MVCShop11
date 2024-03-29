@@ -68,7 +68,7 @@ public class ProductController {
 		Image image = new Image();
 		
 		
-		String uploadPath = "C:\\Users\\bitcamp\\git\\MVCShop09\\09.Model2MVCShop(jQuery)\\src\\main\\webapp\\images\\uploadFiles\\";
+		String uploadPath = "C:\\Users\\bitcamp\\git\\MVCShop11\\11.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
 		//String uploadPath = "C:\\Users\\nghng\\git\\MVCShop09\\09.Model2MVCShop(jQuery)\\src\\main\\webapp\\images\\uploadFiles\\";
 		
 		List<MultipartFile> file = request.getFiles("fileName");
@@ -86,7 +86,7 @@ public class ProductController {
 			
 			System.out.println("originalFileName : "+originalFileName + ", UUID : "+uuid);
 			
-			String fileName = uuid.toString() + "_" + originalFileName; // Unique 한 값고 기존 파일 명 합쳐서 중복되지 않는 이름으로 저장
+			String fileName = uuid.toString() + "_" + originalFileName; // Unique 한 값고 기존 파일 명 합쳐서 중복되지 않는 이름을 만듦
 			
 			image.setFileName(fileName);
 			imageService.addImage(image);
