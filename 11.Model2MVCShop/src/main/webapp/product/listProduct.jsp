@@ -53,19 +53,153 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 
 <script type="text/javascript">
 
-function fncGetUserList(currentPage){
+function fncGetList(currentPage){
 	document.getElementById("currentPage").value = currentPage;
 	document.detailForm.submit();
 }
 
 </script>
+
+<style type="text/css">
+	
+body { padding-top:50px;}
+
+
+	
+</style>
+
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
 <jsp:include page="/layout/toolbar.jsp" />
 
-	<div style="width: 98%; margin-left: 10px;">
+	<div class="container">
+		<div class="page-header text-left">
+			<h3>
+				<c:if test="${param.menu == 'search' }">
+							상품 목록조회								
+				</c:if>
+				<c:if test="${param.menu == 'manage' }">
+							상품 관리								
+				</c:if>
+			</h3>
+		</div>
+	
+		<div class="row">
+		
+			<div class="col-md-6 pull-left">
+				<div>전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</div>
+			</div>
+		
+			<div class="col-md-6 pull-right">
+				<form class="form-inline" name="detailForm" action="/product/listProduct?menu=${param.menu }" method="post">
+				
+					<select name="searchCondition" class="form-control">
+							<option value="0" ${! empty search.searchCondition && search.searchCondition == 0 ? "selected" : ""} >상품번호</option>
+							<option value="1" ${search.searchCondition.trim().equals("1") ? "selected" : ""}>상품명</option>
+							<option value="2" ${search.searchCondition.trim().equals("2") ? "selected" : ""}>상품가격</option>
+					</select> 
+							
+					<div class="form-group">
+						<input type="text" name="searchKeyword" value="${search.searchKeyword}" class="form-control" />
+						<button type="button" class="btn btn-default">검색</button>
+					</div>
+					<input type="hidden" id="currentPage" name="currentPage" value=""/>
+				</form>
+			</div>
+			
+		</div>
+	
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-hover">
+				
+				<thead>
+				
+					<tr>
+					<td class="ct_list_b" width="100">No</td>
+					<td class="ct_line02"></td>
+					<td class="ct_list_b" width="150">상품명</td>
+					<td class="ct_line02"></td>
+					<td class="ct_list_b" width="150">가격</td>
+					<td class="ct_line02"></td>
+					<td class="ct_list_b">등록일</td>
+					<td class="ct_line02"></td>
+					<td class="ct_list_b">현재상태</td>
+				</tr>
+				
+				</thead>
+				
+
+				<tr>
+				<c:set var="i" value="0"></c:set>
+				<c:forEach var="list" items="${list}">
+					<c:set var="i" value="${i+1}"></c:set>
+					<tr class="ct_list_pop">
+					<td align="center">${i}</td>
+					<td></td>
+					<td align="left">
+					
+					
+					<c:url var="getProduct" value="/product/getProduct" >
+						<c:param name="prodNo" value="${list.prodNo}"/>
+						<c:param name="name" value="${param.menu}"/>
+					</c:url>
+					<c:url var="updateProductView" value="/product/updateProductView">
+						<c:param name="prodNo" value="${list.prodNo}"/>
+						<c:param name="name" value="${param.menu}"/>
+					</c:url>
+					
+					
+					<c:if test="${param.menu eq 'search' }">
+					<a href="${getProduct}">${list.prodName}</a>
+					</c:if>
+					<c:if test="${param.menu eq 'manage' }">
+					<a href="${updateProductView}">${list.prodName}</a>
+					</c:if>
+					
+					
+					</td>
+					<td></td>
+					<td align="left">${list.price}</td>
+					<td></td>
+					<td align="left">${list.regDate}</td>
+					<td></td>
+					<td>
+					<c:choose>
+						<c:when test='${list.proTranCode.trim().equals("1") || list.proTranCode == null}'>판매중</c:when>
+						<c:when test='${list.proTranCode.trim().equals("2")}'>
+							판매완료
+							<c:if test='${param.menu.equals("manage") }'>
+								<a href="/purchase/updateTranCodeByProd?tranNo=${list.proTranNo}&tranCode=3">
+								(배송시작)
+								</a>
+							</c:if>
+						</c:when>
+						<c:when test='${list.proTranCode.trim().equals("3")}'>배송중</c:when>
+						<c:when test='${list.proTranCode.trim().equals("4")}'>배송완료</c:when>
+					</c:choose>
+					</td>
+				
+				</tr>
+				
+			</c:forEach>
+
+			</table>
+			
+			<jsp:include page="../common/pageNavigator_new.jsp"/>
+		
+	</div>
+
+
+
+
+
+
+
+
+
+<!-- ------------------------기존 코드 -------------------------------- -->
+	<%--  <div style="width: 98%; margin-left: 10px;">
 
 		<form name="detailForm" action="/product/listProduct?menu=${param.menu }"
 			method="post">
@@ -219,6 +353,6 @@ function fncGetUserList(currentPage){
 
 		</form>
 
-	</div>
+	</div> --%> 
 </body>
 </html>

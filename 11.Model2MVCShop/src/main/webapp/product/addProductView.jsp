@@ -112,11 +112,7 @@ $(function(){
 
 </script>
 <style type="text/css">
-	
-body { padding-top:50px;}
-
-
-	
+	body { padding-top:50px;}
 </style>
 </head>
 

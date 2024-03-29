@@ -50,10 +50,11 @@
 												</if>
 											</if>
 										</where>
-										) inner_table
+										ORDER BY prod_no ) inner_table
 						WHERE ROWNUM &lt;= #{endRowNum} ) p, transaction t
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
 		AND t.prod_no(+) = p.prod_no
+		ORDER BY  p.prod_no
 	</select>
 	
 	<update id="updateProduct" parameterType="product" >
