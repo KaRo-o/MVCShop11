@@ -50,7 +50,7 @@ Product vo = (Product)request.getAttribute("vo");
 
 <jsp:include page="/layout/toolbar.jsp" />
 
-<div class="container">
+<%-- <div class="container">
 	
 	<div class="page-header text-left">
 		<h3>상품 상세정보</h3>
@@ -60,10 +60,10 @@ Product vo = (Product)request.getAttribute("vo");
 	
 	<div class="form-group">
 	
-			<%-- <c:set var="i" value="0"></c:set>
+			<c:set var="i" value="0"></c:set>
 			<c:forEach var="files" items="${files }">
 				<img src = "/images/uploadFiles/${files.fileName}" class="img-rounded img-responsive" alt="Responsive image"/>
-			</c:forEach> --%>
+			</c:forEach>
 			
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 			
@@ -100,7 +100,7 @@ Product vo = (Product)request.getAttribute("vo");
 	
 	
 	</form>
-</div>
+</div> --%>
 
 
 
@@ -118,7 +118,7 @@ Product vo = (Product)request.getAttribute("vo");
 
 
 
-<%-- <form name="detailForm" method="post">
+<form name="detailForm" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -252,6 +252,6 @@ Product vo = (Product)request.getAttribute("vo");
 	</tr>
 </table>
 </form>
- --%>
+ 
 </body>
 </html>

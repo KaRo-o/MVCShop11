@@ -58,6 +58,50 @@ function fncGetList(currentPage){
 	document.detailForm.submit();
 }
 
+$(function() {
+	$("td:nth-child(6) > i").on('click', function() {
+		
+		var selector = $(this).next().attr('value2');
+		console.log(selector);
+		
+		if($('i[value2="'+selector+'"]').hasClass("glyphicon-triangle-bottom")){
+			
+			var prodNo = $(this).next().attr('value1');
+			
+			$('i[value2="'+selector+'"]').attr('class','glyphicon glyphicon-triangle-top');
+			
+			$.ajax(
+					{
+						url : "/product/json/getProduct/"+prodNo ,
+						method : "GET" ,
+						dataType : "json" ,
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						success : function(JSONData , status) {
+							var displayValue ="<h6>"
+													+"상품명 : "+JSONData.prodName+"<br/>"
+													+"상품상세정보 : "+JSONData.prodDetail+"<br/>"
+													+"</h6>";
+							$("#"+selector+"").append(displayValue);
+							
+						}
+			});//ajax end	
+			
+		}else{
+			
+			
+			
+			$('i[value2="'+selector+'"]').attr('class','glyphicon glyphicon-triangle-bottom');
+			$("#"+selector).find('h6').remove();
+		}
+		
+		
+	});
+});
+
+
 </script>
 
 <style type="text/css">
@@ -111,35 +155,28 @@ body { padding-top:50px;}
 			
 		</div>
 	
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-hover">
+		<table class="table table-hover table-striped">
 				
 				<thead>
 				
-					<tr>
-					<td class="ct_list_b" width="100">No</td>
-					<td class="ct_line02"></td>
-					<td class="ct_list_b" width="150">상품명</td>
-					<td class="ct_line02"></td>
-					<td class="ct_list_b" width="150">가격</td>
-					<td class="ct_line02"></td>
-					<td class="ct_list_b">등록일</td>
-					<td class="ct_line02"></td>
-					<td class="ct_list_b">현재상태</td>
+				<tr>
+					<td>No</td>
+					<td>상품명</td>
+					<td>가격</td>
+					<td>등록일</td>
+					<td>현재상태</td>
 				</tr>
 				
 				</thead>
 				
 
-				<tr>
+				<tbody>
 				<c:set var="i" value="0"></c:set>
 				<c:forEach var="list" items="${list}">
-					<c:set var="i" value="${i+1}"></c:set>
-					<tr class="ct_list_pop">
+				<c:set var="i" value="${i+1}"></c:set>
+					<tr>
 					<td align="center">${i}</td>
-					<td></td>
-					<td align="left">
-					
-					
+					<td align="left" id="${i}">
 					<c:url var="getProduct" value="/product/getProduct" >
 						<c:param name="prodNo" value="${list.prodNo}"/>
 						<c:param name="name" value="${param.menu}"/>
@@ -148,8 +185,6 @@ body { padding-top:50px;}
 						<c:param name="prodNo" value="${list.prodNo}"/>
 						<c:param name="name" value="${param.menu}"/>
 					</c:url>
-					
-					
 					<c:if test="${param.menu eq 'search' }">
 					<a href="${getProduct}">${list.prodName}</a>
 					</c:if>
@@ -159,11 +194,8 @@ body { padding-top:50px;}
 					
 					
 					</td>
-					<td></td>
 					<td align="left">${list.price}</td>
-					<td></td>
 					<td align="left">${list.regDate}</td>
-					<td></td>
 					<td>
 					<c:choose>
 						<c:when test='${list.proTranCode.trim().equals("1") || list.proTranCode == null}'>판매중</c:when>
@@ -179,11 +211,15 @@ body { padding-top:50px;}
 						<c:when test='${list.proTranCode.trim().equals("4")}'>배송완료</c:when>
 					</c:choose>
 					</td>
-				
-				</tr>
-				
+					<td align="left">
+					<i class="glyphicon glyphicon-triangle-bottom" value2="${i}"></i>
+					<input type="hidden" value1="${list.prodNo}" value2="${i}"/>
+					</td>
+			
 			</c:forEach>
-
+			
+				</tbody>
+				
 			</table>
 			
 			<jsp:include page="../common/pageNavigator_new.jsp"/>

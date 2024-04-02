@@ -125,7 +125,7 @@
 		});
 		
 		$("a:contains('판매상품등록')").on('click', function() {
-			self.location = "/product/addProductView";
+			self.location = "/product/addProductView.jsp";
 		});
 		
 		$("a:contains('판매상품관리')").on('click', function() {
