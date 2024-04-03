@@ -80,6 +80,7 @@ $(function() {
 							"Content-Type" : "application/json"
 						},
 						success : function(JSONData , status) {
+							console.log(JSONData);
 							var displayValue ="<h6>"
 													+"상품명 : "+JSONData.prodName+"<br/>"
 													+"상품상세정보 : "+JSONData.prodDetail+"<br/>"
@@ -99,6 +100,63 @@ $(function() {
 		
 		
 	});
+});
+
+var currPage = 1;
+
+$(window).scroll(function() {
+    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+      
+     
+      $.ajax(
+    		  {
+    			  url: "/product/json/listProduct",
+    			  method : "POST",
+    			  dataType : "json",
+   				  headers : {
+						"Accept" : "application/json",
+						"Content-Type" : "application/json"
+					},
+			 	  data: JSON.stringify({ // Convert data object to JSON string
+			        currentPage: currPage
+			      }),
+				  success : function(JSONData, status) {
+					  if(JSONData.product.length != 0){
+						  console.log(++currPage);
+						  console.log("complete")
+						  console.log(JSONData);
+						  
+						 
+						  
+						  for(let i = 0; JSONData.product.length > i; i++){
+							  var displayValue = "";
+							  console.log(JSONData.product[i].prodName);
+							  displayValue += '<div class="col-sm-6 col-md-4">' +
+													    '<div class="thumbnail">'+
+													      '<a href="#"><img  src="/images/uploadFiles/'+JSONData.product[i].fileName+'" alt="..."></a>'+
+													      '<div class="caption">'+
+													        '<h3>'+JSONData.product[i].prodName+'</h3>'+
+													        '<p>...</p>'+
+													      '</div>'+
+													    '</div>'+
+													  '</div>'
+							$("#test").append(displayValue);
+						  }
+						  
+						  
+							  
+						 
+					  }else{
+						  console.log("페이지 끝");
+					  }
+					  
+											 
+				  }
+				
+    		  });
+      
+      
+    }
 });
 
 
@@ -172,48 +230,48 @@ body { padding-top:50px;}
 
 				<tbody>
 				<c:set var="i" value="0"></c:set>
-				<c:forEach var="list" items="${list}">
+				<c:forEach var="product" items="${product}">
 				<c:set var="i" value="${i+1}"></c:set>
 					<tr>
 					<td align="center">${i}</td>
 					<td align="left" id="${i}">
 					<c:url var="getProduct" value="/product/getProduct" >
-						<c:param name="prodNo" value="${list.prodNo}"/>
+						<c:param name="prodNo" value="${product.prodNo}"/>
 						<c:param name="name" value="${param.menu}"/>
 					</c:url>
 					<c:url var="updateProductView" value="/product/updateProductView">
-						<c:param name="prodNo" value="${list.prodNo}"/>
+						<c:param name="prodNo" value="${product.prodNo}"/>
 						<c:param name="name" value="${param.menu}"/>
 					</c:url>
 					<c:if test="${param.menu eq 'search' }">
-					<a href="${getProduct}">${list.prodName}</a>
+					<a href="${getProduct}">${product.prodName}</a>
 					</c:if>
 					<c:if test="${param.menu eq 'manage' }">
-					<a href="${updateProductView}">${list.prodName}</a>
+					<a href="${updateProductView}">${product.prodName}</a>
 					</c:if>
 					
 					
 					</td>
-					<td align="left">${list.price}</td>
-					<td align="left">${list.regDate}</td>
+					<td align="left">${product.price}</td>
+					<td align="left">${product.regDate}</td>
 					<td>
 					<c:choose>
-						<c:when test='${list.proTranCode.trim().equals("1") || list.proTranCode == null}'>판매중</c:when>
-						<c:when test='${list.proTranCode.trim().equals("2")}'>
+						<c:when test='${product.proTranCode.trim().equals("1") || product.proTranCode == null}'>판매중</c:when>
+						<c:when test='${lproductist.proTranCode.trim().equals("2")}'>
 							판매완료
 							<c:if test='${param.menu.equals("manage") }'>
-								<a href="/purchase/updateTranCodeByProd?tranNo=${list.proTranNo}&tranCode=3">
+								<a href="/purchase/updateTranCodeByProd?tranNo=${product.proTranNo}&tranCode=3">
 								(배송시작)
 								</a>
 							</c:if>
 						</c:when>
-						<c:when test='${list.proTranCode.trim().equals("3")}'>배송중</c:when>
-						<c:when test='${list.proTranCode.trim().equals("4")}'>배송완료</c:when>
+						<c:when test='${product.proTranCode.trim().equals("3")}'>배송중</c:when>
+						<c:when test='${product.proTranCode.trim().equals("4")}'>배송완료</c:when>
 					</c:choose>
 					</td>
 					<td align="left">
 					<i class="glyphicon glyphicon-triangle-bottom" value2="${i}"></i>
-					<input type="hidden" value1="${list.prodNo}" value2="${i}"/>
+					<input type="hidden" value1="${product.prodNo}" value2="${i}"/>
 					</td>
 			
 			</c:forEach>
@@ -228,7 +286,34 @@ body { padding-top:50px;}
 
 
 
-
+	<div class="container" >
+	
+	
+	
+		<div class="row" id="test">
+		
+		<c:set var="i" value="0"></c:set>
+		<c:forEach var="product" items="${product}">
+		<c:set var="i" value="${i+1}"></c:set>
+		
+		  <div class="col-sm-6 col-md-4">
+		    <div class="thumbnail">
+		      <img src="/images/uploadFiles/${product.fileName}" alt="...">
+		      <div class="caption">
+		        <h3>${product.prodName}</h3>
+		        <p>...</p>
+		        <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+		      </div>
+		    </div>
+		  </div>
+		  
+	  	</c:forEach>
+		  
+		</div>
+		
+	
+	
+	</div>
 
 
 

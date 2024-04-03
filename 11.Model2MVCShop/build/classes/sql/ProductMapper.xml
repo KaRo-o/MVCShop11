@@ -33,6 +33,32 @@
 	</select>
 	
 	<select id="getProductList" parameterType="search" resultMap="productSelectMap">
+		SELECT p.prod_no, p.prod_name, p.prod_detail, p.manufacture_day, p.price, p.reg_date , NVL(t.tran_status_code, 1) tran_status_code , tran_no, nvl(i.file_name, p.image_file) image_file
+		FROM ( SELECT inner_table.* ,ROWNUM AS row_seq
+						FROM  ( SELECT prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date
+										FROM product
+										<where>
+											<if test="searchCondition != null">
+												<if test="searchCondition == 0 and searchKeyword !='' ">
+													prod_no LIKE '%${searchKeyword}%'
+												</if>
+												<if test="searchCondition == 1 and searchKeyword !='' ">
+													prod_name LIKE '%${searchKeyword}%'
+												</if>
+												<if test="searchCondition == 2 and searchKeyword !='' ">
+													price = #{searchKeyword}
+												</if>
+											</if>
+										</where>
+										ORDER BY prod_no ) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} ) p, transaction t, image i
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
+		AND t.prod_no(+) = p.prod_no
+		AND i.file_key(+) = image_file
+		ORDER BY  p.prod_no
+	</select>
+	
+	<!-- <select id="getProductList" parameterType="search" resultMap="productSelectMap">
 		SELECT p.* , NVL(t.tran_status_code, 1) tran_status_code , tran_no
 		FROM ( SELECT inner_table.* ,ROWNUM AS row_seq
 						FROM  ( SELECT prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date
@@ -55,7 +81,7 @@
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum}
 		AND t.prod_no(+) = p.prod_no
 		ORDER BY  p.prod_no
-	</select>
+	</select> -->
 	
 	<update id="updateProduct" parameterType="product" >
 		UPDATE product

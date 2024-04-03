@@ -63,7 +63,7 @@ public class ProductController {
 		Image image = new Image();
 		
 		
-		String uploadPath = "C:\\Users\\bitcamp\\git\\MVCShop09\\09.Model2MVCShop(jQuery)\\src\\main\\webapp\\images\\uploadFiles\\";
+		String uploadPath = "C:\\Users\\bitcamp\\git\\MVCShop11\\11.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
 		//String uploadPath = "C:\\Users\\nghng\\git\\MVCShop09\\09.Model2MVCShop(jQuery)\\src\\main\\webapp\\images\\uploadFiles\\";
 		
 		List<MultipartFile> file = request.getFiles("fileName");
@@ -180,10 +180,11 @@ public class ProductController {
 		
 		Map<String, Object> map = productService.getProductList(search);
 		
+		
 		Page resultPage = new Page(search.getCurrentPage(), 
 								((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
-		model.addAttribute("list", map.get("list"));
+		model.addAttribute("product", map.get("product"));
 		model.addAttribute("resultPage",resultPage);
 		model.addAttribute("search", search);
 		

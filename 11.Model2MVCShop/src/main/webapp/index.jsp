@@ -48,7 +48,13 @@
 			$("a[href='#' ]:contains('로 그 인')").on("click" , function() {
 				self.location = "/user/login"
 			});
+			
+			$("a[href='#']:contains('상품검색')").on('click', function() {
+				self.location = "/product/listProduct?menu=search";
+			});
 		});
+		
+		
 		
 	</script>	
 	

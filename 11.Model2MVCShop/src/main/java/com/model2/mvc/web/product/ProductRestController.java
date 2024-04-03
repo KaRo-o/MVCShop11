@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,9 +47,13 @@ public class ProductRestController {
 		return productService.getProduct(prodNo);
 	}
 	
-	@RequestMapping(value="json/listProduct", method = RequestMethod.GET)
+	@RequestMapping(value="json/listProduct", method = RequestMethod.POST)
 	public Map<String, Object> listProduct( @ModelAttribute("search") Search search, Model model
-										,HttpServletRequest request) throws Exception {
+										,HttpServletRequest request, @RequestBody Search request2) throws Exception {
+		
+		int currentPage = request2.getCurrentPage();
+		
+		search.setCurrentPage(currentPage);
 		
 		if(search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
